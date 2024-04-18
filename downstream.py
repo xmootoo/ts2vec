@@ -11,7 +11,7 @@ parser.add_argument('--epochs', type=int, default=10, help='Number of epochs')
 parser.add_argument('--batch_size', type=int, default=16, help='Batch size')
 parser.add_argument('--seq_len', type=int, default=336, help='Sequence length')
 parser.add_argument('--pred_lens', type=int, nargs='+', default=[96], help='Prediction lengths')
-
+parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate')
 # Parse arguments
 args = parser.parse_args()
 
@@ -33,6 +33,7 @@ results = fine_tune(pretrained_model,
               args.name,
               epochs=args.epochs,
               batch_size=args.batch_size,
+              lr=args.lr,
               train_slice=train_slice,
               valid_slice=valid_slice,
               test_slice=test_slice,

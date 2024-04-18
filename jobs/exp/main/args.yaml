@@ -1,6 +1,6 @@
 name: ETTh1
 epochs: 10
-lr: 1e-4
 batch_size: 32
 seq_len: 336
 pred_lens: 96
+lr: 1e-4
