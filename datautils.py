@@ -130,8 +130,9 @@ def _get_time_features(dt):
         dt.day.to_numpy(),
         dt.dayofyear.to_numpy(),
         dt.month.to_numpy(),
-        dt.weekofyear.to_numpy(),
-    ], axis=1).astype(np.float)
+        # dt.weekofyear.to_numpy(),
+        dt.isocalendar().week.to_numpy(),
+    ], axis=1).astype(float)
 
 
 def load_forecast_csv(name, univar=False):
@@ -163,17 +164,19 @@ def load_forecast_csv(name, univar=False):
     
     scaler = StandardScaler().fit(data[train_slice])
     data = scaler.transform(data)
-    if name in ('electricity'):
+    if "ETT" not in name:
         data = np.expand_dims(data.T, -1)  # Each variable is an instance rather than a feature
+        print("Non-ETT shape activated")
     else:
         data = np.expand_dims(data, 0)
+        print("ETT shape activated")
     
     if n_covariate_cols > 0:
         dt_scaler = StandardScaler().fit(dt_embed[train_slice])
         dt_embed = np.expand_dims(dt_scaler.transform(dt_embed), 0)
         data = np.concatenate([np.repeat(dt_embed, data.shape[0], axis=0), data], axis=-1)
     
-    if name in ('ETTh1', 'ETTh2', 'electricity'):
+    if name in ('ETTh1', 'ETTh2', 'electricity', 'weather', 'traffic', 'illness'):
         pred_lens = [24, 48, 168, 336, 720]
     else:
         pred_lens = [24, 48, 96, 288, 672]

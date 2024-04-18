@@ -123,24 +123,25 @@ if __name__ == '__main__':
         n_iters=args.iters,
         verbose=True
     )
-    model.save(f'{run_dir}/model.pkl')
+    # model.save(f'{run_dir}/model.pkl')
+    torch.save(model.net, f"pretrained/{args.dataset}.pt")
 
     t = time.time() - t
     print(f"\nTraining time: {datetime.timedelta(seconds=t)}\n")
 
-    if args.eval:
-        if task_type == 'classification':
-            out, eval_res = tasks.eval_classification(model, train_data, train_labels, test_data, test_labels, eval_protocol='svm')
-        elif task_type == 'forecasting':
-            out, eval_res = tasks.eval_forecasting(model, data, train_slice, valid_slice, test_slice, scaler, pred_lens, n_covariate_cols)
-        elif task_type == 'anomaly_detection':
-            out, eval_res = tasks.eval_anomaly_detection(model, all_train_data, all_train_labels, all_train_timestamps, all_test_data, all_test_labels, all_test_timestamps, delay)
-        elif task_type == 'anomaly_detection_coldstart':
-            out, eval_res = tasks.eval_anomaly_detection_coldstart(model, all_train_data, all_train_labels, all_train_timestamps, all_test_data, all_test_labels, all_test_timestamps, delay)
-        else:
-            assert False
-        pkl_save(f'{run_dir}/out.pkl', out)
-        pkl_save(f'{run_dir}/eval_res.pkl', eval_res)
-        print('Evaluation result:', eval_res)
+    # if args.eval:
+    #     if task_type == 'classification':
+    #         out, eval_res = tasks.eval_classification(model, train_data, train_labels, test_data, test_labels, eval_protocol='svm')
+    #     elif task_type == 'forecasting':
+    #         out, eval_res = tasks.eval_forecasting(model, data, train_slice, valid_slice, test_slice, scaler, pred_lens, n_covariate_cols)
+    #     elif task_type == 'anomaly_detection':
+    #         out, eval_res = tasks.eval_anomaly_detection(model, all_train_data, all_train_labels, all_train_timestamps, all_test_data, all_test_labels, all_test_timestamps, delay)
+    #     elif task_type == 'anomaly_detection_coldstart':
+    #         out, eval_res = tasks.eval_anomaly_detection_coldstart(model, all_train_data, all_train_labels, all_train_timestamps, all_test_data, all_test_labels, all_test_timestamps, delay)
+    #     else:
+    #         assert False
+    #     pkl_save(f'{run_dir}/out.pkl', out)
+    #     pkl_save(f'{run_dir}/eval_res.pkl', eval_res)
+    #     print('Evaluation result:', eval_res)
 
-    print("Finished.")
+    # print("Finished.")
