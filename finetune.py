@@ -26,7 +26,7 @@ def get_forecast_loader(data, seq_len, pred_len, batch_size, input_dims=None, sh
     if isinstance(data, np.ndarray):
         data = torch.from_numpy(data).float()
     dataset = ForecastingDataset(data, seq_len, pred_len, input_dims)
-    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, drop_last=True)
 
 
 class View(nn.Module):
@@ -78,7 +78,7 @@ def get_downstream_ett_model(model, embed_dim, num_channels, seq_len, pred_len, 
                                     View((batch_size, pred_len, num_channels))) # (B, pred_len, num_channels)
     # Count parameters
     num_params = sum(p.numel() for p in downstream_model.parameters())
-    print(f"Downstream Model with {num_params} parameters loaded")
+    print(f"Downstream Model with {num_params:,} parameters loaded")
 
     return downstream_model
 
@@ -92,7 +92,7 @@ def get_downstream_model(model, embed_dim, num_channels, seq_len, pred_len, batc
 
     # Count parameters
     num_params = sum(p.numel() for p in downstream_model.parameters())
-    print(f"Downstream Model with {num_params} parameters loaded")
+    print(f"Downstream Model with {num_params:,} parameters loaded")
 
     return downstream_model
 
@@ -120,7 +120,7 @@ def fine_tune(pretrained_model,
     test_data = data[:, test_slice]
 
 
-    num_channels = train_data.shape[0]
+    num_channels = 7 if "ETT" in name else train_data.shape[0]
 
     criterion = criterion()
 
@@ -161,11 +161,12 @@ def fine_tune(pretrained_model,
             print(f"Training ({epoch}/{epochs})")
             for i, (x, y) in enumerate(train_loader):
                 optimizer.zero_grad()
-
+                print(x.shape)
                 x = x.to(device)
                 y = y.squeeze(k).to(device)
-
+                
                 y_hat = model(x)
+                # print(f"y_hat shape: {y_hat.shape}. y shape: {y.shape}")
 
                 loss = criterion(y_hat, y)
                 train_loss+=loss.item()

@@ -12,14 +12,13 @@ parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
 parser.add_argument('--seq_len', type=int, default=336, help='Sequence length')
 parser.add_argument('--pred_lens', type=int, nargs='+', default=[96], help='Prediction lengths')
 parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate')
-# Parse arguments
+
 args = parser.parse_args()
 
 # Load data and pretrained model
-
 data, train_slice, valid_slice, test_slice, scaler, pred_lens, n_covariate_cols = load_forecast_csv(args.name)
 
-print(data.shape)
+print("Data Shape: ", data.shape)
 pretrained_model = torch.load(f"pretrained/{args.name}.pt", map_location=torch.device('cpu'))
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
