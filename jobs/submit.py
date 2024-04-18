@@ -106,15 +106,15 @@ def load_configs(exp_name):
     """
 
     # Compute Canada Configuration
-    with open(os.path.join("exp", exp_name, "compute_canada.yaml")) as f:
+    with open(os.path.join("jobs/exp", exp_name, "compute_canada.yaml")) as f:
         cc_config = yaml.safe_load(f)
 
     # SLURM Configuration
-    with open(os.path.join("exp", exp_name, "slurm.yaml")) as f:
+    with open(os.path.join("jobs/exp", exp_name, "slurm.yaml")) as f:
         slurm_config = yaml.safe_load(f)
 
     # CLI Arguments
-    with open(os.path.join("exp", exp_name, "args.yaml")) as f:
+    with open(os.path.join("jobs/exp", exp_name, "args.yaml")) as f:
         cli_args = yaml.safe_load(f)
 
     # Convert the data to a string
