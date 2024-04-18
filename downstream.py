@@ -27,21 +27,17 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 n_params = sum(p.numel() for p in pretrained_model.parameters())
 print(f"TS2vec Model with {n_params:,} parameters loaded")
 
-# Parameters
-
-
-
-
-results = fine_tune(pretrained_model, 
-              data, 
+# Run fine-tuning
+results = fine_tune(pretrained_model,
+              data,
               args.name,
               epochs=args.epochs,
               batch_size=args.batch_size,
-              train_slice=train_slice, 
-              valid_slice=valid_slice, 
-              test_slice=test_slice, 
+              train_slice=train_slice,
+              valid_slice=valid_slice,
+              test_slice=test_slice,
               seq_len=args.seq_len,
-              pred_lens=[96], 
+              pred_lens=[96],
               device=device)
 
 # Save logs
