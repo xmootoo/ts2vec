@@ -99,7 +99,7 @@ def get_downstream_model(model, embed_dim, num_channels, seq_len, pred_len, batc
 
 def fine_tune(pretrained_model,
               data,
-              dataset_name,
+              name,
               train_slice,
               valid_slice,
               test_slice,
@@ -131,14 +131,14 @@ def fine_tune(pretrained_model,
     results = {}
 
     # If dir does not exist make it
-    if not os.path.exists(f'downstream/{dataset_name}'):
-        os.makedirs(f'downstream/{dataset_name}', exist_ok=True)
+    if not os.path.exists(f'downstream/{name}'):
+        os.makedirs(f'downstream/{name}', exist_ok=True)
 
     for pred_len in pred_lens:
 
-        best_model_path = f'downstream/{dataset_name}/{pred_len}.pth'
+        best_model_path = f'downstream/{name}/{pred_len}.pth'
 
-        if "ETT" in dataset_name:
+        if "ETT" in name:
             model = get_downstream_ett_model(pretrained_model, embed_dim, num_channels, seq_len, pred_len, batch_size).to(device)
             k = 1
         else:
