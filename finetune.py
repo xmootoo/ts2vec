@@ -161,12 +161,10 @@ def fine_tune(pretrained_model,
             print(f"Training ({epoch}/{epochs})")
             for i, (x, y) in enumerate(train_loader):
                 optimizer.zero_grad()
-                print(x.shape)
                 x = x.to(device)
                 y = y.squeeze(k).to(device)
                 
                 y_hat = model(x)
-                # print(f"y_hat shape: {y_hat.shape}. y shape: {y.shape}")
 
                 loss = criterion(y_hat, y)
                 train_loss+=loss.item()
